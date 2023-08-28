@@ -1,8 +1,10 @@
 use itertools::Itertools;
 use regex::Regex;
 
-pub fn uwuify(text: &str, stutter_strength: Option<f32>, emoji_strength: Option<f32>, tilde_strength: Option<f32>) {
-    todo!()
+pub fn uwuify(text: &str) -> String {
+    let text = words_replace(text);
+    let text = replace_with_w(&text);
+    nyaify(&text)
 }
 
 fn words_replace(text: &str) -> String {
@@ -34,6 +36,11 @@ fn replace_with_w(text: &str) -> String {
     char_regex.replace_all(text, "w").to_string()
 }
 
+fn nyaify(text: &str) -> String {
+    let nyai_regex = Regex::new(r"(?<start>n)(?<prec>[aeou][^aeiou])").unwrap();
+    nyai_regex.replace_all(text, "${start}y$prec").to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -53,5 +60,17 @@ mod tests {
     fn test_replace_with_w() {
         let w_replace = replace_with_w("rowdy rowers are great");
         assert_eq!(w_replace, "wowdy wowews awe gweat");
+    }
+
+    #[test]
+    fn test_nyai() {
+        let n_replaced = nyaify("none is good");
+        assert_eq!(n_replaced, "nyone is good");
+    }
+
+    #[test]
+    fn test_uwu() {
+        let uwued_text = uwuify("According to all known laws of aviation, there is no way a bee should be able to fly.");
+        assert_eq!(uwued_text, "Accowding to aww knyown waws of aviation, thewe is nyo way a bee shouwd be abwe to fwy.")
     }
 }
