@@ -32,8 +32,10 @@ fn replace_word(word: &str) -> &str {
 
 fn replace_with_w(text: &str) -> String {
     let char_regex = Regex::new("[lr]").unwrap();
+    let ou_regex = Regex::new("[ou]").unwrap();
 
-    char_regex.replace_all(text, "w").to_string()
+    let temp = char_regex.replace_all(text, "w").to_string();
+    ou_regex.replace_all(&temp, "${0}w$0").to_string()
 }
 
 fn nyaify(text: &str) -> String {
@@ -59,7 +61,7 @@ mod tests {
     #[test]
     fn test_replace_with_w() {
         let w_replace = replace_with_w("rowdy rowers are great");
-        assert_eq!(w_replace, "wowdy wowews awe gweat");
+        assert_eq!(w_replace, "wowowdy wowowews awe gweat");
     }
 
     #[test]
@@ -71,6 +73,6 @@ mod tests {
     #[test]
     fn test_uwu() {
         let uwued_text = uwuify("According to all known laws of aviation, there is no way a bee should be able to fly.");
-        assert_eq!(uwued_text, "Accowding to aww knyown waws of aviation, thewe is nyo way a bee shouwd be abwe to fwy.")
+        assert_eq!(uwued_text, "Accowowding towo aww knyowown waws owof aviatiowon, thewe is nyowo way a bee showouwuwd be abwe towo fwy.")
     }
 }
